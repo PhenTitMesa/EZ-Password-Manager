@@ -13,7 +13,6 @@ Usage:
 Requirements:
     - Python 3.8+
     - CustomTkinter
-    - cryptography
     - pyperclip
 
 Author: Student Project

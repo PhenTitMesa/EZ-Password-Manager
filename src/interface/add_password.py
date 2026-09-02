@@ -49,7 +49,7 @@ class AddPasswordWindow(ctk.CTkToplevel):
 
         # Configure window
         self.title(title)
-        self.geometry("450x550")
+        self.geometry("500x650")
         self.resizable(False, False)
 
         # Make this window modal
@@ -58,9 +58,9 @@ class AddPasswordWindow(ctk.CTkToplevel):
 
         # Center the window
         self.update_idletasks()
-        x = (self.winfo_screenwidth() // 2) - (450 // 2)
-        y = (self.winfo_screenheight() // 2) - (550 // 2)
-        self.geometry(f"450x550+{x}+{y}")
+        x = (self.winfo_screenwidth() // 2) - (500 // 2)
+        y = (self.winfo_screenheight() // 2) - (650 // 2)
+        self.geometry(f"500x650+{x}+{y}")
 
         # Create the UI
         self._create_widgets()
@@ -72,9 +72,18 @@ class AddPasswordWindow(ctk.CTkToplevel):
     def _create_widgets(self):
         """Create all form widgets."""
 
-        # Main container
-        self.frame = ctk.CTkFrame(self, fg_color="transparent")
-        self.frame.pack(expand=True, fill="both", padx=30, pady=20)
+        # Main container with scrollable frame for long forms
+        self.scrollable_frame = ctk.CTkScrollableFrame(
+            self,
+            fg_color="transparent",
+            scrollbar_button_color="#555555",
+            scrollbar_button_hover_color="#777777",
+        )
+        self.scrollable_frame.pack(expand=True, fill="both", padx=10, pady=10)
+
+        # Inner frame for content
+        self.frame = ctk.CTkFrame(self.scrollable_frame, fg_color="transparent")
+        self.frame.pack(fill="x", padx=20)
 
         # Title label
         title_text = "Edit Password" if self.is_edit_mode else "Add New Password"
@@ -202,34 +211,34 @@ class AddPasswordWindow(ctk.CTkToplevel):
         self.error_label = ctk.CTkLabel(
             self.frame, text="", font=("Arial", 12), text_color="#FF4444"
         )
-        self.error_label.pack(pady=(0, 5))
+        self.error_label.pack(pady=(0, 10))
 
-        # Button frame
+        # Button frame - fixed at bottom
         button_frame = ctk.CTkFrame(self.frame, fg_color="transparent")
-        button_frame.pack(fill="x")
+        button_frame.pack(fill="x", pady=(10, 0))
 
         # Cancel button
         cancel_btn = ctk.CTkButton(
             button_frame,
             text="Cancel",
             command=self.destroy,
-            width=120,
-            height=40,
-            font=("Arial", 13),
+            width=140,
+            height=45,
+            font=("Arial", 14),
             fg_color="#555555",
             hover_color="#444444",
         )
-        cancel_btn.pack(side="left")
+        cancel_btn.pack(side="left", padx=(0, 10))
 
-        # Save button
-        save_text = "Update" if self.is_edit_mode else "Save"
+        # Save button - BIG and prominent
+        save_text = "Add Password" if not self.is_edit_mode else "Update Password"
         self.save_button = ctk.CTkButton(
             button_frame,
             text=save_text,
             command=self._save_password,
-            width=120,
-            height=40,
-            font=("Arial", 13, "bold"),
+            width=200,
+            height=45,
+            font=("Arial", 14, "bold"),
             fg_color="#2B5EA7",
             hover_color="#1E4080",
         )
