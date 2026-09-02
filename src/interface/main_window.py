@@ -142,8 +142,12 @@ class MainWindow(ctk.CTk):
         main.main()
 
     def _on_close(self):
-        """Handle window close button."""
+        """Handle window close button - fully terminate the application."""
         self.destroy()
+        self.quit()  # Stop the mainloop
+        import sys
+
+        sys.exit(0)  # Ensure all processes terminate
 
 
 def main():

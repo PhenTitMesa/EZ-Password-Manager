@@ -52,6 +52,9 @@ class AddPasswordWindow(ctk.CTkToplevel):
         self.geometry("500x650")
         self.resizable(False, False)
 
+        # Handle window close button (X) - close this modal only
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
+
         # Make this window modal
         self.transient(self.master)
         self.grab_set()
@@ -347,3 +350,8 @@ class AddPasswordWindow(ctk.CTkToplevel):
             message: The error message to display
         """
         self.error_label.configure(text=message)
+
+    def _on_close(self):
+        """Handle window close button (X) - close this modal only (not the app)."""
+        self.grab_release()
+        self.destroy()

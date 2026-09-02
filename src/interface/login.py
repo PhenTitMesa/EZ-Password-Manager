@@ -43,6 +43,9 @@ class LoginWindow(ctk.CTkToplevel):
         self.geometry("400x350")
         self.resizable(False, False)
 
+        # Handle window close button (X) - terminate the entire app
+        self.protocol("WM_DELETE_WINDOW", self._on_close)
+
         # Make this window modal (blocks interaction with other windows)
         self.transient(self.master)
         self.grab_set()
@@ -199,3 +202,11 @@ class LoginWindow(ctk.CTkToplevel):
 
         # Call the success callback to open main window
         self.on_success()
+
+    def _on_close(self):
+        """Handle window close button (X) - terminate the entire application."""
+        self.grab_release()
+        self.destroy()
+        import sys
+
+        sys.exit(0)
