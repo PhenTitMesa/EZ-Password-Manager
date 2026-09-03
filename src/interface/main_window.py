@@ -51,7 +51,7 @@ class MainWindow(ctk.CTk):
         # Configure window
         self.title(f"{APP_NAME} v{VERSION}")
         self.geometry("900x700")
-        self.resizable(False, False)
+        self.resizable(True, True)  # Allow maximize and resize
         self.protocol("WM_DELETE_WINDOW", self._on_close)
 
         # Try to set window icon (optional)
