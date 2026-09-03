@@ -51,7 +51,7 @@ class DashboardWindow(ctk.CTkFrame):
         self.refresh_password_list()
 
     def _create_header(self):
-        """Create the header with title, version, and add button."""
+        """Create the header with title and add button."""
 
         # Header frame
         header = ctk.CTkFrame(self, fg_color="transparent")
@@ -65,12 +65,6 @@ class DashboardWindow(ctk.CTkFrame):
             text_color="#FFFFFF",
         )
         title.pack(side="left")
-
-        # Version label (right side)
-        version_label = ctk.CTkLabel(
-            header, text=f"v{VERSION}", font=("Arial", 10), text_color="#666666"
-        )
-        version_label.pack(side="right", padx=(10, 0))
 
         # Add new password button
         self.add_button = ctk.CTkButton(

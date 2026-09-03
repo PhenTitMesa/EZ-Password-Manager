@@ -1,11 +1,11 @@
 # Simple Password Manager v1.0
 
-A beginner-friendly password manager with modern CustomTkinter UI, Fernet encryption, and secure storage.
+A beginner-friendly password manager with modern CustomTkinter UI, secure encryption, and simple storage.
 
 ## Features
 
 - **Master Password Login** - Secure authentication with PBKDF2 hashing
-- **Password Storage** - Encrypted JSON storage using Fernet (AES-128)
+- **Password Storage** - Encrypted JSON storage using XOR + HMAC-SHA256 (stdlib only)
 - **Password Generator** - Create secure passwords with customizable options
 - **Search & Filter** - Find passwords by title or username
 - **Copy to Clipboard** - One-click copy for usernames and passwords
@@ -15,7 +15,6 @@ A beginner-friendly password manager with modern CustomTkinter UI, Fernet encryp
 
 - Python 3.8+
 - CustomTkinter (modern UI)
-- cryptography (Fernet encryption)
 - pyperclip (clipboard operations)
 
 ## Installation
@@ -100,12 +99,13 @@ Simple Password Manager/
 │   └── components/
 │       ├── __init__.py
 │       └── generator.py      # Password generator
-└── test files (optional)
+└── assets/
+    └── icon.png              # Application icon
 ```
 
 ## Security Features
 
-- **Fernet Encryption** - AES-128-CBC with HMAC-SHA256 authentication
+- **XOR + HMAC-SHA256 Encryption** - Simple symmetric encryption with authentication
 - **PBKDF2 Hashing** - 100,000 iterations for master password
 - **Random Salts** - Each master password hash uses unique salt
 - **Encrypted Storage** - All passwords encrypted in JSON file
@@ -113,8 +113,9 @@ Simple Password Manager/
 ## Technical Details
 
 ### Encryption
-- Uses `cryptography` library's Fernet implementation
-- Symmetric encryption with randomly generated key
+- Uses only Python standard library (hashlib, hmac, os, secrets)
+- XOR cipher with random key for encryption
+- HMAC-SHA256 for authentication
 - Key stored in `secret.key` file
 
 ### Master Password
@@ -125,16 +126,10 @@ Simple Password Manager/
 
 ### Storage
 - Passwords stored in `passwords.json`
-- Entire file encrypted with Fernet
+- Entire file encrypted with XOR
 - Supports add, update, delete, search operations
 
 ## Development
-
-### Running Tests
-```bash
-python test_manager.py      # Test storage operations
-python test_generator.py    # Test password generator
-```
 
 ### Code Structure
 - **Beginner-friendly** - Simple classes and functions

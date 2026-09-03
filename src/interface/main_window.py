@@ -49,7 +49,7 @@ class MainWindow(ctk.CTk):
 
         # Try to set window icon (optional)
         try:
-            self.iconbitmap("src/interface/assets/icon.ico")
+            self.iconbitmap("src/interface/assets/icon.png")
         except Exception:
             pass  # Icon not found - continue without it
 
@@ -89,7 +89,7 @@ class MainWindow(ctk.CTk):
         # Logout button
         logout_btn = ctk.CTkButton(
             navbar,
-            text="🔒 Logout",
+            text="Logout",
             command=self._logout,
             width=90,
             height=32,
