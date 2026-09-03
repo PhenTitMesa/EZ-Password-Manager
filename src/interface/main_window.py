@@ -3,7 +3,7 @@ Main Window - The primary application window.
 
 This module provides:
 - Main application window that hosts the dashboard
-- Navigation bar with title and version
+- Navigation bar with title, version, and UI size selector
 - Integration with login system
 - Proper window lifecycle management
 
@@ -19,6 +19,13 @@ from src import VERSION, APP_NAME
 # Set appearance mode and color theme
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("dark-blue")
+
+# UI Size presets: (scaling_factor, window_width, window_height)
+UI_SIZE_PRESETS = {
+    "Default": (1.0, 900, 700),
+    "Larger": (1.2, 1080, 840),
+    "Largest": (1.4, 1260, 980),
+}
 
 
 class MainWindow(ctk.CTk):
@@ -60,7 +67,7 @@ class MainWindow(ctk.CTk):
         self._create_dashboard()
 
     def _create_navbar(self):
-        """Create the top navigation bar with title and version."""
+        """Create the top navigation bar with title, version, and UI size selector."""
 
         # Navbar frame
         navbar = ctk.CTkFrame(self, fg_color="#1E1E1E", corner_radius=0, height=60)
@@ -98,6 +105,29 @@ class MainWindow(ctk.CTk):
             hover_color="#444444",
         )
         logout_btn.pack(side="right", padx=(0, 10), pady=12)
+
+        # UI Size dropdown (left of logout button)
+        size_label = ctk.CTkLabel(
+            navbar, text="UI Size:", font=("Arial", 11), text_color="#AAAAAA"
+        )
+        size_label.pack(side="right", padx=(0, 5), pady=12)
+
+        self.size_var = ctk.StringVar(value="Default")
+        size_dropdown = ctk.CTkOptionMenu(
+            navbar,
+            variable=self.size_var,
+            values=list(UI_SIZE_PRESETS.keys()),
+            command=self._on_size_change,
+            width=100,
+            height=32,
+            font=("Arial", 11),
+            fg_color="#2B5EA7",
+            button_color="#1E4080",
+            button_hover_color="#153060",
+            dropdown_fg_color="#2B2B2B",
+            dropdown_hover_color="#3B3B3B",
+        )
+        size_dropdown.pack(side="right", padx=(0, 5), pady=12)
 
     def _create_dashboard(self):
         """Create the main dashboard area with password list."""
@@ -140,6 +170,21 @@ class MainWindow(ctk.CTk):
         import main
 
         main.main()
+
+    def _on_size_change(self, selected_size: str):
+        """
+        Handle UI size change from dropdown.
+
+        Args:
+            selected_size: The selected size preset (Default, Larger, Largest)
+        """
+        scaling, width, height = UI_SIZE_PRESETS[selected_size]
+
+        # Apply the scaling factor
+        ctk.set_widget_scaling(scaling)
+
+        # Resize the window
+        self.geometry(f"{width}x{height}")
 
     def _on_close(self):
         """Handle window close button - fully terminate the application."""
