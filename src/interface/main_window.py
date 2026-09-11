@@ -41,7 +41,7 @@ class MainWindow(ctk.CTk):
         self._create_dashboard()
 
     def _create_navbar(self):
-        # Top navbar with title, UI size selector, and logout
+        # Top navbar with title and UI size selector
 
         navbar = ctk.CTkFrame(self, fg_color="#1E1E1E", corner_radius=0, height=60)
         navbar.pack(fill="x", side="top")
@@ -86,20 +86,7 @@ class MainWindow(ctk.CTk):
             padx=8,
             pady=2,
         )
-        version_label.pack(side="right", padx=10, pady=12)
-
-        # Logout button (right)
-        logout_btn = ctk.CTkButton(
-            navbar,
-            text="Logout",
-            command=self._logout,
-            width=90,
-            height=32,
-            font=("Arial", 11),
-            fg_color="#EF4444",
-            hover_color="#FF917D",
-        )
-        logout_btn.pack(side="right", padx=(0, 10), pady=12)
+        version_label.pack(side="right", padx=20, pady=12)
 
     def _create_dashboard(self):
         # Main password list area
@@ -125,13 +112,6 @@ class MainWindow(ctk.CTk):
             on_save_callback=self.dashboard.refresh_password_list,
             entry=entry,
         )
-
-    def _logout(self):
-        # Logout and return to login screen
-        self.destroy()
-        import main
-
-        main.main()
 
     def _on_size_change(self, selected_size: str):
         # Change UI scaling
