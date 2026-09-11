@@ -1,81 +1,44 @@
-"""
-Add/Edit Password Window - Form for creating and modifying passwords.
-
-This module provides:
-- Form with all required fields (title, username, password, category, notes)
-- Password visibility toggle (show/hide)
-- Category selection dropdown
-- Form validation for required fields
-- Both add and edit modes
-- Integration with password generator
-
-This window is used when adding a new password or editing an existing one.
-"""
+# AddPasswordWindow - Form for adding and editing passwords
 
 import customtkinter as ctk
 from src.storage.manager import PasswordManager
 
 
 class AddPasswordWindow(ctk.CTkToplevel):
-    """
-    Window for adding or editing password entries.
+    # Add/Edit password form modal
 
-    This window provides a form for entering password details
-    and handles both creation and modification of entries.
-    """
-
-    # Available categories for passwords
     CATEGORIES = ["Social", "Email", "Banking", "Other"]
 
     def __init__(self, manager: PasswordManager, on_save_callback, entry=None):
-        """
-        Initialize the add/edit password window.
-
-        Args:
-            manager: PasswordManager instance for data operations
-            on_save_callback: Function to call after saving (refresh dashboard)
-            entry: Existing entry to edit (None for new password)
-        """
         super().__init__()
 
-        # Store references
         self.manager = manager
         self.on_save = on_save_callback
-        self.entry = entry  # None for add mode, dict for edit mode
-
-        # Determine window title based on mode
+        self.entry = entry  # None = add mode, dict = edit mode
         self.is_edit_mode = entry is not None
-        title = "Edit Password" if self.is_edit_mode else "Add New Password"
 
-        # Configure window
+        # Window setup
+        title = "Edit Password" if self.is_edit_mode else "Add New Password"
         self.title(title)
         self.geometry("500x650")
         self.resizable(False, False)
-
-        # Handle window close button (X) - close this modal only
         self.protocol("WM_DELETE_WINDOW", self._on_close)
-
-        # Make this window modal
         self.transient(self.master)
         self.grab_set()
 
-        # Center the window
+        # Center on screen
         self.update_idletasks()
         x = (self.winfo_screenwidth() // 2) - (500 // 2)
         y = (self.winfo_screenheight() // 2) - (650 // 2)
         self.geometry(f"500x650+{x}+{y}")
 
-        # Create the UI
         self._create_widgets()
 
-        # If editing, populate the form with existing data
         if self.is_edit_mode:
             self._populate_form(entry)
 
     def _create_widgets(self):
-        """Create all form widgets."""
-
-        # Main container with scrollable frame for long forms
+        # Scrollable form
         self.scrollable_frame = ctk.CTkScrollableFrame(
             self,
             fg_color="transparent",
@@ -84,26 +47,22 @@ class AddPasswordWindow(ctk.CTkToplevel):
         )
         self.scrollable_frame.pack(expand=True, fill="both", padx=10, pady=10)
 
-        # Inner frame for content
         self.frame = ctk.CTkFrame(self.scrollable_frame, fg_color="transparent")
         self.frame.pack(fill="x", padx=20)
 
-        # Title label
+        # Form title
         title_text = "Edit Password" if self.is_edit_mode else "Add New Password"
-        title = ctk.CTkLabel(
+        ctk.CTkLabel(
             self.frame,
             text=title_text,
             font=("Arial", 22, "bold"),
             text_color="#FFFFFF",
-        )
-        title.pack(pady=(0, 20))
+        ).pack(pady=(0, 20))
 
-        # Title field (required)
-        title_label = ctk.CTkLabel(
+        # Title field
+        ctk.CTkLabel(
             self.frame, text="Title *", font=("Arial", 12), text_color="#AAAAAA"
-        )
-        title_label.pack(anchor="w", pady=(0, 5))
-
+        ).pack(anchor="w", pady=(0, 5))
         self.title_entry = ctk.CTkEntry(
             self.frame,
             placeholder_text="e.g., Gmail, Netflix, Bank",
@@ -113,15 +72,13 @@ class AddPasswordWindow(ctk.CTkToplevel):
         )
         self.title_entry.pack(pady=(0, 10))
 
-        # Username field (required)
-        username_label = ctk.CTkLabel(
+        # Username field
+        ctk.CTkLabel(
             self.frame,
             text="Username / Email *",
             font=("Arial", 12),
             text_color="#AAAAAA",
-        )
-        username_label.pack(anchor="w", pady=(0, 5))
-
+        ).pack(anchor="w", pady=(0, 5))
         self.username_entry = ctk.CTkEntry(
             self.frame,
             placeholder_text="e.g., user@email.com",
@@ -131,12 +88,10 @@ class AddPasswordWindow(ctk.CTkToplevel):
         )
         self.username_entry.pack(pady=(0, 10))
 
-        # Password field with toggle (required)
-        password_label = ctk.CTkLabel(
+        # Password field with show/hide + generate
+        ctk.CTkLabel(
             self.frame, text="Password *", font=("Arial", 12), text_color="#AAAAAA"
-        )
-        password_label.pack(anchor="w", pady=(0, 5))
-
+        ).pack(anchor="w", pady=(0, 5))
         password_frame = ctk.CTkFrame(self.frame, fg_color="transparent")
         password_frame.pack(fill="x", pady=(0, 10))
 
@@ -150,7 +105,7 @@ class AddPasswordWindow(ctk.CTkToplevel):
         )
         self.password_entry.pack(side="left")
 
-        # Show/hide password toggle
+        # Show/hide toggle
         self.show_password_var = ctk.BooleanVar(value=False)
         self.show_hide_button = ctk.CTkButton(
             password_frame,
@@ -164,8 +119,8 @@ class AddPasswordWindow(ctk.CTkToplevel):
         )
         self.show_hide_button.pack(side="left", padx=(10, 0))
 
-        # Generate password button
-        generate_btn = ctk.CTkButton(
+        # Generate button
+        ctk.CTkButton(
             password_frame,
             text="⚡ Generate",
             width=80,
@@ -174,15 +129,12 @@ class AddPasswordWindow(ctk.CTkToplevel):
             fg_color="#10B981",
             hover_color="#059669",
             command=self._open_generator,
-        )
-        generate_btn.pack(side="left", padx=(10, 0))
+        ).pack(side="left", padx=(10, 0))
 
         # Category dropdown
-        category_label = ctk.CTkLabel(
+        ctk.CTkLabel(
             self.frame, text="Category", font=("Arial", 12), text_color="#AAAAAA"
-        )
-        category_label.pack(anchor="w", pady=(0, 5))
-
+        ).pack(anchor="w", pady=(0, 5))
         self.category_var = ctk.StringVar(value="Other")
         self.category_menu = ctk.CTkOptionMenu(
             self.frame,
@@ -196,32 +148,29 @@ class AddPasswordWindow(ctk.CTkToplevel):
         )
         self.category_menu.pack(pady=(0, 10))
 
-        # Notes field (optional)
-        notes_label = ctk.CTkLabel(
+        # Notes field
+        ctk.CTkLabel(
             self.frame,
             text="Notes (optional)",
             font=("Arial", 12),
             text_color="#AAAAAA",
-        )
-        notes_label.pack(anchor="w", pady=(0, 5))
-
+        ).pack(anchor="w", pady=(0, 5))
         self.notes_textbox = ctk.CTkTextbox(
             self.frame, width=390, height=80, font=("Arial", 13)
         )
         self.notes_textbox.pack(pady=(0, 10))
 
-        # Error message label
+        # Error message
         self.error_label = ctk.CTkLabel(
             self.frame, text="", font=("Arial", 12), text_color="#FF4444"
         )
         self.error_label.pack(pady=(0, 10))
 
-        # Button frame - fixed at bottom
+        # Buttons
         button_frame = ctk.CTkFrame(self.frame, fg_color="transparent")
         button_frame.pack(fill="x", pady=(10, 0))
 
-        # Cancel button
-        cancel_btn = ctk.CTkButton(
+        ctk.CTkButton(
             button_frame,
             text="Cancel",
             command=self.destroy,
@@ -230,10 +179,8 @@ class AddPasswordWindow(ctk.CTkToplevel):
             font=("Arial", 14),
             fg_color="#555555",
             hover_color="#444444",
-        )
-        cancel_btn.pack(side="left", padx=(0, 10))
+        ).pack(side="left", padx=(0, 10))
 
-        # Save button - BIG and prominent
         save_text = "Add Password" if not self.is_edit_mode else "Update Password"
         self.save_button = ctk.CTkButton(
             button_frame,
@@ -248,23 +195,17 @@ class AddPasswordWindow(ctk.CTkToplevel):
         self.save_button.pack(side="right")
 
     def _populate_form(self, entry: dict):
-        """
-        Fill the form with existing password data for editing.
-
-        Args:
-            entry: The password entry to edit
-        """
+        # Fill form with existing data for editing
         self.title_entry.insert(0, entry.get("title", ""))
         self.username_entry.insert(0, entry.get("username", ""))
         self.password_entry.insert(0, entry.get("password", ""))
         self.category_var.set(entry.get("category", "Other"))
-
         notes = entry.get("notes", "")
         if notes:
             self.notes_textbox.insert("1.0", notes)
 
     def _toggle_password_visibility(self):
-        """Toggle password field between visible and hidden."""
+        # Show/hide password
         if self.show_password_var.get():
             self.password_entry.configure(show="●")
             self.show_password_var.set(False)
@@ -273,46 +214,35 @@ class AddPasswordWindow(ctk.CTkToplevel):
             self.show_password_var.set(True)
 
     def _open_generator(self):
-        """Open the password generator and use the result."""
-        # Import here to avoid circular dependency
+        # Open password generator and use result
         from src.components.generator import PasswordGeneratorDialog
 
-        # Open generator and get generated password
         dialog = PasswordGeneratorDialog(self)
         self.wait_window(dialog)
-
-        # If a password was generated, insert it
         if hasattr(dialog, "generated_password") and dialog.generated_password:
             self.password_entry.delete(0, "end")
             self.password_entry.insert(0, dialog.generated_password)
-            # Show the password since we just generated it
             self.password_entry.configure(show="")
             self.show_password_var.set(True)
 
     def _save_password(self):
-        """Validate and save the password entry."""
-
-        # Get form values
+        # Validate and save
         title = self.title_entry.get().strip()
         username = self.username_entry.get().strip()
         password = self.password_entry.get().strip()
         category = self.category_var.get()
         notes = self.notes_textbox.get("1.0", "end-1c").strip()
 
-        # Validate required fields
         if not title:
             self._show_error("Title is required")
             return
-
         if not username:
             self._show_error("Username is required")
             return
-
         if not password:
             self._show_error("Password is required")
             return
 
-        # Create the entry dictionary
         entry = {
             "title": title,
             "username": username,
@@ -321,37 +251,27 @@ class AddPasswordWindow(ctk.CTkToplevel):
             "notes": notes,
         }
 
-        # Save to manager
         if self.is_edit_mode:
-            # Update existing entry
             if self.manager.update_password(self.entry["id"], entry):
                 self._on_save_success()
             else:
                 self._show_error("Failed to update password")
         else:
-            # Add new entry
             self.manager.add_password(entry)
             self._on_save_success()
 
     def _on_save_success(self):
-        """Handle successful save operation."""
+        # Close modal and refresh dashboard
         self.grab_release()
         self.destroy()
-
-        # Call the save callback to refresh the dashboard
         if self.on_save:
             self.on_save()
 
     def _show_error(self, message: str):
-        """
-        Display an error message.
-
-        Args:
-            message: The error message to display
-        """
+        # Show error message
         self.error_label.configure(text=message)
 
     def _on_close(self):
-        """Handle window close button (X) - close this modal only (not the app)."""
+        # Close this modal only
         self.grab_release()
         self.destroy()
