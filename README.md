@@ -1,145 +1,22 @@
-# Simple Password Manager v1.0
+# EZ Password Manager
+#### A user-friendly password management application
 
-A beginner-friendly password manager with modern CustomTkinter UI, secure encryption, and simple storage.
+## Features:
+- Made with CustomTkinter for the UI
+- Master password login with `PBKDF2` for hashing
+- A password generator
+- Search name/category and copy password to clipboard
+- Default with Dark Mode UI and a customizable GUI scale
+- Encrypted password storage, it stores inside your `C:\Users\%USERNAME%\AppData\Local\EZManagerStorage`
+- If you forget your login password - you can delete `master.key` inside `C:\Users\%USERNAME%\AppData\Local\EZManagerStorage` then you can register back and use your password as normal.
 
-## Features
+# Instruction
+## How to use the app (Release Download)
+- Download the `EZ-Password-Manager.zip`
+- After that, extract the `zip`
+- Finally, double-click `EZ Password Manager.exe` to launch the app
 
-- **Master Password Login** - Secure authentication with PBKDF2 hashing
-- **Password Storage** - Encrypted JSON storage using XOR + HMAC-SHA256 (stdlib only)
-- **Password Generator** - Create secure passwords with customizable options
-- **Search & Filter** - Find passwords by title or username
-- **Copy to Clipboard** - One-click copy for usernames and passwords
-- **Modern UI** - Dark-themed CustomTkinter interface
-
-## Requirements
-
-- Python 3.8+
-- CustomTkinter (modern UI)
-- pyperclip (clipboard operations)
-
-## Installation
-
-```bash
-# Clone or download this project
-cd Simple Password Manager
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run the application
-python main.py
-```
-
-## First Run
-
-1. Launch the application
-2. You'll see "Set Master Password" screen
-3. Enter a master password (minimum 4 characters)
-4. Confirm your password
-5. Click "Set Password"
-
-## Subsequent Runs
-
-1. Launch the application
-2. Enter your master password
-3. Click "Login"
-
-## Usage
-
-### Adding Passwords
-1. Click "+ Add Password" button
-2. Fill in title, username, and password
-3. Select a category (Social, Email, Banking, Other)
-4. Add notes (optional)
-5. Click "Save"
-
-### Using Password Generator
-1. In the Add/Edit form, click "⚡ Generate"
-2. Adjust length with the slider
-3. Select character types (uppercase, lowercase, digits, symbols)
-4. Click "Generate" to create a password
-5. Click "Use Password" to fill the form
-
-### Searching Passwords
-1. Type in the search bar
-2. Results filter automatically as you type
-3. Click "Clear" to show all passwords
-
-### Copying to Clipboard
-- Click the clipboard icon next to any username or password
-- A toast notification confirms the copy
-
-### Editing Passwords
-1. Click "✏️ Edit" on any password card
-2. Modify the fields
-3. Click "Update"
-
-### Deleting Passwords
-1. Click "🗑️ Delete" on any password card
-2. Type "DELETE" to confirm
-3. The password is permanently removed
-
-## Project Structure
-
-```
-Simple Password Manager/
-├── main.py                    # Application entry point
-├── requirements.txt           # Python dependencies
-├── src/
-│   ├── __init__.py           # VERSION and APP_NAME constants
-│   ├── storage/
-│   │   ├── __init__.py
-│   │   └── manager.py        # PasswordManager (encryption, CRUD)
-│   ├── interface/
-│   │   ├── __init__.py
-│   │   ├── main_window.py    # Main application window
-│   │   ├── login.py          # Login/setup screen
-│   │   ├── dashboard.py      # Password list view
-│   │   └── add_password.py   # Add/Edit form
-│   └── components/
-│       ├── __init__.py
-│       └── generator.py      # Password generator
-└── assets/
-    └── icon.png              # Application icon
-```
-
-## Security Features
-
-- **XOR + HMAC-SHA256 Encryption** - Simple symmetric encryption with authentication
-- **PBKDF2 Hashing** - 100,000 iterations for master password
-- **Random Salts** - Each master password hash uses unique salt
-- **Encrypted Storage** - All passwords encrypted in JSON file
-
-## Technical Details
-
-### Encryption
-- Uses only Python standard library (hashlib, hmac, os, secrets)
-- XOR cipher with random key for encryption
-- HMAC-SHA256 for authentication
-- Key stored in `secret.key` file
-
-### Master Password
-- Hashed with PBKDF2-HMAC-SHA256
-- 16-byte random salt per password
-- 100,000 iterations for brute-force resistance
-- Stored in `master.key` file
-
-### Storage
-- Passwords stored in `passwords.json`
-- Entire file encrypted with XOR
-- Supports add, update, delete, search operations
-
-## Development
-
-### Code Structure
-- **Beginner-friendly** - Simple classes and functions
-- **Well-commented** - Every function has docstrings
-- **No complex patterns** - Easy to understand and modify
-
-## License
-
-This is a student project for educational purposes.
-
-## Version History
-
-- **v1.0** - Initial release with all core features
+## How to use the app (Source Code Method)
+- Must have Python 3.8+
+- Inside the app directory do `pip install -r requirements.txt` in the command prompt.
+- Then, do `python main.py`
